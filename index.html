@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia ♡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #4a4a4a;
+            --accent: #d4a373;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- FONDO DINÁMICO DE FOTOS --- */
+        .bg-floating-photos {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-floating-photos img {
+            position: absolute;
+            width: 140px; 
+            filter: sepia(0.2) blur(0.5px);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: float 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0) rotate(-5deg); }
+            to { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle, rgba(253,250,246,0) 0%, rgba(253,250,246,1) 80%);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        /* TIMER AESTHETIC */
+        #timer {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 30px 50px;
+            border-radius: 100px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+            border: 1px solid rgba(212, 163, 115, 0.2);
+        }
+
+        .time-unit { display: flex; flex-direction: column; min-width: 60px; }
+        .time-unit span:first-child { font-size: 2.8rem; font-weight: 600; color: #333; line-height: 1; }
+        .time-unit span:last-child { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; margin-top: 5px; }
+
+        /* --- POLAROIDS --- */
+        .gallery {
+            max-width: 1200px;
+            margin: 80px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .polaroid-card {
+            perspective: 1000px;
+            height: 480px;
+            cursor: pointer;
+        }
+
+        .polaroid-inner {
+            position: relative;
+            width: 100%; height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .polaroid-card.flipped .polaroid-inner { transform: rotateY(180deg); }
+
+        .front, .back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            background: white;
+            padding: 18px 18px 60px 18px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+            box-sizing: border-box;
+            border: 1px solid #f2f2f2;
+        }
+
+        .front img { width: 100%; height: 380px; object-fit: cover; border-radius: 2px; }
+        .front p { text-align: center; font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-top: 15px; }
+
+        .back {
+            transform: rotateY(180deg);
+            background-color: var(--accent);
+            color: white;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 35px; text-align: center;
+        }
+
+        .back h3 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 15px; }
+        .back p { line-height: 1.6; font-size: 1rem; }
+
+        /* BOTÓN DE CONTINUAR */
+        .next-btn-container { text-align: center; padding-bottom: 120px; }
+        .btn {
+            background: var(--accent); color: white; border: none;
+            padding: 20px 60px; border-radius: 100px; cursor: pointer;
+            font-size: 1.2rem; font-family: 'Poppins'; transition: 0.4s;
+        }
+        .btn:hover { letter-spacing: 2px; box-shadow: 0 10px 30px rgba(212, 163, 115, 0.4); }
+
+        /* ESTILOS PÁGINA 2 */
+        #page2 {
+            background: linear-gradient(to bottom, #333 0%, #121212 40%, #121212 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 40px 10%;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .playlist-header { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 30px; }
+        .playlist-cover { width: 230px; height: 230px; box-shadow: 0 10px 60px rgba(0,0,0,0.5); }
+        .playlist-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .badge { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; }
+        .playlist-title { font-size: 4.5rem; margin: 0; font-family: 'Poppins', sans-serif; font-weight: 800; letter-spacing: -2px; }
+        .playlist-meta { display: flex; align-items: center; gap: 10px; margin-top: 15px; font-size: 0.9rem; }
+        .mini-avatar { width: 25px; height: 25px; border-radius: 50%; object-fit: cover; }
+        .controls { display: flex; align-items: center; gap: 30px; margin-bottom: 30px; }
+        .play-btn { width: 60px; height: 60px; background: #1DB954; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: black; cursor: pointer; }
+        .tracklist { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .track { display: grid; grid-template-columns: 30px 50px 1fr 50px; align-items: center; gap: 15px; padding: 10px; border-radius: 8px; }
+        .track:hover { background: rgba(255,255,255,0.1); cursor: pointer; }
+        .track-img-container { width: 45px; height: 45px; background: #282828; }
+        .track-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .bonus { border: 1px solid rgba(29, 185, 84, 0.3); margin-top: 20px; background: rgba(29, 185, 84, 0.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .playlist-title { font-size: 2.5rem; }
+            .track { grid-template-columns: 30px 50px 1fr; }
+            h1 { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-floating-photos">
+        <img src="foto_lengua_1.jpeg" style="top: 2%; left: 5%; transform: rotate(-15deg); width: 120px;">
+        <img src="foto_auto.jpeg" style="top: 8%; right: 5%; transform: rotate(10deg); width: 130px;">
+        <img src="foto_mirando.jpeg" style="top: 25%; left: 15%; transform: rotate(-5deg); width: 110px;">
+        <img src="foto_bus.jpeg" style="top: 50%; right: 10%; transform: rotate(-10deg);">
+        <img src="foto_gym.jpeg" style="top: 45%; left: 2%; transform: rotate(15deg);">
+        <img src="foto_pancho.jpeg" style="bottom: 10%; left: 8%; transform: rotate(-12deg);">
+        <img src="foto_mirando_2.jpeg" style="bottom: 15%; right: 5%; transform: rotate(8deg);">
+    </div>
+
+    <div id="page1">
+        <section class="hero">
+            <h1>Nuestra Historia</h1>
+            <div class="subtitle">Momentos inolvidables</div>
+            <div id="timer">
+                <div class="time-unit"><span id="days">00</span><span>Días</span></div>
+                <div class="time-unit"><span id="hours">00</span><span>Horas</span></div>
+                <div class="time-unit"><span id="minutes">00</span><span>Mins</span></div>
+                <div class="time-unit"><span id="seconds">00</span><span>Segs</span></div>
+            </div>
+        </section>
+
+        <div class="gallery">
+            <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
+                <div class="polaroid-inner">
+                    <div class="front">
+                        <img src="foto_bus.jpeg" alt="Nuestro inicio">
+                        <p>Mi amor</p>
+                    </div>
+                    <div class="back">
+                        <h3>22 de Abril</h3>
+                        <p>Un año de esa primera vez que tuve el valor de declarate lo q siento por vs, y darme cuanta q era correspondido :) </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
+                <div class="polaroid-inner">
+                    <div class="front">
+                        <img src="foto_gym.jpeg" alt="Gimnasio">
+                        <p>Gym bross</p>
+                    </div>
+                    <div class="back">
+                        <h3>mas que musculos</h3>
+                        <p>Amo cada momento que compartimos, desde las risas en el gym hasta nuestross entramientos de piernas junntos. Gracias por ser mi compañera de vida y hacer que cada día sea especial.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
+                <div class="polaroid-inner">
+                    <div class="front">
+                        <img src="foto_pancho.jpeg" alt="Momento divertido">
+                        <p>Mi felicidad</p>
+                    </div>
+                    <div class="back">
+                        <h3>Por mil risas más bebe</h3>
+                        <p>Gracias por hacerme reír hasta cuando no tengo ganas, gracias por lo mucho q me das, gracias por lo mucho q te dañaron, gracias por confiar en mi <3 </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-btn-container">
+            <button class="btn" onclick="showPlaylist()">Continuar a nuestra Playlist →</button>
+        </div>
+    </div>
+
+   <div id="page2" style="display: none;">
+    <audio id="bg-music" loop>
+        <source src="MILO J - TUS VUELTAS (audio)(mp3j.cc).mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="playlist-container">
+        <div class="back-nav" onclick="stopMusicAndBack()" style="cursor:pointer; margin-bottom: 20px; opacity: 0.6;">
+            ← Volver al Museo
+        </div>
+
+        <div class="playlist-header">
+            <div class="playlist-cover">
+                <img src="foto_auto.jpeg" alt="Portada Aniversario">
+            </div>
+            <div class="playlist-info">
+                <p class="badge">Playlist</p>
+                <h2 class="playlist-title">Te amo💗</h2>
+                <div class="playlist-meta">
+                    <img src="foto_gym.jpeg" class="mini-avatar">
+                    <b>Para mi persona favorita</b> • 2026 • 4 canciones 
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="play-btn" onclick="togglePlay()" id="master-play">▶</div>
+            <div class="heart-btn">✦</div>
+            <div class="download-btn">⇩</div>
+        </div>
+
+        <div class="tracklist">
+            <div class="track" onclick="window.open('https://open.spotify.com/intl-es/track/303D81e8SIdU62S7L8p556', '_blank')">
+                <div class="track-num">1</div>
+                <div class="track-img-container"><img src="foto_bus.jpeg"></div>
+                <div class="track-details"><b>Tus Vueltas</b><span></span></div>
+                <div class="track-time">3:12</div>
+            </div>
+
+            <div class="track" onclick="window.open('https://open.spotify.com/intl-es/track/3SdTKo2uVs6H2B00pYQ9pk', '_blank')">
+                <div class="track-num">2</div>
+                <div class="track-img-container"><img src="foto_gym.jpeg"></div>
+                <div class="track-details"><b>Stand By Me</b><span></span></div>
+                <div class="track-time">2:59</div>
+            </div>
+
+            <div class="track" onclick="window.open('https://open.spotify.com/intl-es/track/6Z0pU0m29B0D9S9Yy9Z1Xz', '_blank')">
+                <div class="track-num">3</div>
+                <div class="track-img-container"><img src="foto_pancho.jpeg"></div>
+                <div class="track-details"><b>Doma</b><span></span></div>
+                <div class="track-time">2:45</div>
+            </div>
+
+            <div class="track" onclick="window.open('https://open.spotify.com/intl-es/track/1I2H7m3Z4V8y2O0R4f5U8A', '_blank')">
+                <div class="track-num">4</div>
+                <div class="track-img-container"><img src="foto_lengua_1.jpeg"></div>
+                <div class="track-details"><b>Puesto</b><span></span></div>
+                <div class="track-time">3:28</div>
+            </div>
+
+            <div class="track bonus" onclick="showLetter()">
+                <div class="track-num">✨</div>
+                <div class="track-img-container" style="background: var(--accent); display: flex; align-items: center; justify-content: center;">💌</div>
+                <div class="track-details"><b style="color: #d2e951;">Una carta para vos mi amor</b><span>este es unos de los muchos regalitos q se vienen</span></div>
+                <div class="track-time">∞</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const music = document.getElementById('bg-music');
+
+    function showPlaylist() {
+        document.getElementById('page1').style.display = 'none';
+        document.getElementById('page2').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function togglePlay() {
+        if (music.paused) {
+            music.play();
+            document.getElementById('master-play').innerText = '⏸';
+        } else {
+            music.pause();
+            document.getElementById('master-play').innerText = '▶';
+        }
+    }
+
+    function stopMusicAndBack() {
+        music.pause();
+        location.reload();
+    }
+
+    function showLetter() {
+        document.getElementById('page2').style.display = 'none';
+        document.getElementById('page3').style.display = 'flex';
+        window.scrollTo(0, 0);
+    }
+
+    // Lógica del Reloj
+    const startDate = new Date(2025, 3, 22, 0, 0, 0); 
+    function updateTimer() {
+        const now = new Date();
+        const diff = now - startDate;
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        if (document.getElementById('days')) {
+            document.getElementById('days').innerText = d;
+            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+        }
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+</script>
+    <div id="page3" style="display: none; height: 100vh; justify-content: center; align-items: center;">
+        <h2 style="color: var(--accent);">Próximamente: Tu Carta ♡</h2>
+    </div>
+
+    <script>
+        function showPlaylist() {
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function showLetter() {
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        const startDate = new Date(2025, 3, 22, 0, 0, 0); 
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            if (document.getElementById('days')) {
+                document.getElementById('days').innerText = d;
+                document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+                document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+                document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html>
